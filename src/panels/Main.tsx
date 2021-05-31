@@ -10,7 +10,7 @@ import {
 } from '@vkontakte/vkui';
 
 import PanelHeaderReorder from '../components/PanelHeaderReorder';
-import type { CounterType, Timer } from '../types';
+import type { Timer } from '../types';
 import {
   Icon28AddOutline,
   Icon28DeleteOutline,
@@ -24,7 +24,6 @@ import Name from '../components/Name';
 
 interface MainState {
   currentIndexSlide: number;
-  counterType: CounterType;
 }
 
 export interface MainProps {
@@ -42,27 +41,15 @@ export class Main extends React.Component<MainProps, MainState> {
   constructor(props: MainProps) {
     super(props);
 
-    const ct: CounterType = localStorage.getItem('counter-type')
-      ? (localStorage.getItem('counter-type') as CounterType)
-      : 'days_left';
-
     this.state = {
-      counterType: ct,
       currentIndexSlide: props.indexSlide,
     };
-
-    this.updateCounterType = this.updateCounterType.bind(this);
-  }
-
-  updateCounterType(t: CounterType): void {
-    localStorage.setItem('counter-type', t);
-    this.setState({ counterType: t });
   }
 
   render(): JSX.Element {
     const { setPanel, timers, deleteTimer, indexSlide, choseSlide } =
       this.props;
-    const { currentIndexSlide, counterType } = this.state;
+    const { currentIndexSlide } = this.state;
 
     return (
       <>
@@ -117,11 +104,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 </Div>
                 <FixedLayout vertical="bottom">
                   <Div>
-                    <Counter
-                      timer={item}
-                      counterType={counterType}
-                      updateCounterType={this.updateCounterType}
-                    />
+                    <Counter timer={item} />
                   </Div>
                   {Math.abs(currentIndexSlide - index) < 2 && (
                     <BottomBar

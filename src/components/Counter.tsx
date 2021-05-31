@@ -5,9 +5,11 @@ import { getDays, getWeeks, daysLeft, numberCase } from '../date';
 import './Counter.css';
 
 export interface CounterProps {
-  counterType: CounterType;
-  updateCounterType: (t: CounterType) => void;
   timer: Timer;
+}
+
+export interface CounterState {
+  counterType: CounterType;
 }
 
 const CounterDaysLeft: FC<{ timer: Timer }> = ({ timer }: { timer: Timer }) => {
@@ -136,31 +138,46 @@ const CounterPercentPassed: FC<{ timer: Timer }> = ({
   );
 };
 
-const Counter: FC<CounterProps> = ({
-  counterType,
-  updateCounterType,
-  timer,
-}: CounterProps) => {
-  return (
-    <div
-      onClick={() => {
-        let index = counterTypeList.indexOf(counterType) + 1;
-        if (index >= counterTypeList.length) index = 0;
-        updateCounterType(counterTypeList[index]);
-      }}
-    >
-      {
+class Counter extends React.Component<CounterProps, CounterState> {
+  constructor(props: CounterProps) {
+    super(props);
+
+    const counterType: CounterType = localStorage.getItem('counter-type')
+      ? (localStorage.getItem('counter-type') as CounterType)
+      : 'days_left';
+    this.state = {
+      counterType,
+    };
+  }
+
+  render(): JSX.Element {
+    const { timer } = this.props;
+    const { counterType } = this.state;
+
+    return (
+      <div
+        onClick={() => {
+          let index = counterTypeList.indexOf(counterType) + 1;
+          if (index >= counterTypeList.length) index = 0;
+          this.setState({
+            counterType: counterTypeList[index],
+          });
+          localStorage.setItem('counter-type', counterTypeList[index]);
+        }}
+      >
         {
-          days_left: <CounterDaysLeft timer={timer} />,
-          days_passed: <CounterDaysPassed timer={timer} />,
-          weeks_left: <CounterWeeksLeft timer={timer} />,
-          weeks_passed: <CounterWeeksPassed timer={timer} />,
-          percent_left: <CounterPercentLeft timer={timer} />,
-          percent_passed: <CounterPercentPassed timer={timer} />,
-        }[counterType]
-      }
-    </div>
-  );
-};
+          {
+            days_left: <CounterDaysLeft timer={timer} />,
+            days_passed: <CounterDaysPassed timer={timer} />,
+            weeks_left: <CounterWeeksLeft timer={timer} />,
+            weeks_passed: <CounterWeeksPassed timer={timer} />,
+            percent_left: <CounterPercentLeft timer={timer} />,
+            percent_passed: <CounterPercentPassed timer={timer} />,
+          }[counterType]
+        }
+      </div>
+    );
+  }
+}
 
 export default Counter;
