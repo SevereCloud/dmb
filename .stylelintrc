@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    "stylelint-order",
+  ],
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "order/order": [
+			"custom-properties",
+			"declarations"
+		],
+    "order/properties-order": [
+      "position",
+      "z-index",
+      "top",
+      "right",
+      "bottom",
+      "left",
+			"width",
+			"height"
+    ],
+  }
+}

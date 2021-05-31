@@ -1,0 +1,268 @@
+.BottomBar {
+  position: relative;
+}
+
+.BottomBar--vis.BottomBar--fixed::before {
+  display: block;
+  content: '';
+}
+
+.BottomBar__fixed {
+  z-index: 10;
+}
+
+.BottomBar__in {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  position: relative;
+  background: var(--header_background);
+}
+
+.BottomBar--trnsp .BottomBar__in {
+  background: transparent;
+}
+
+.BottomBar--shadow .BottomBar__in {
+  box-shadow: 0 0 4px rgba(0, 0, 0, .08);
+}
+
+.BottomBar__left {
+  box-sizing: border-box;
+  color: var(--header_tint);
+  display: flex;
+  flex-shrink: 0;
+}
+
+.BottomBar__left .Avatar {
+  margin-left: 8px;
+}
+
+.BottomBar__content {
+  overflow: hidden;
+}
+
+.BottomBar__content > * {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.BottomBar__content-in {
+  color: var(--header_text);
+  font-weight: 800;
+  font-family: var(--font-tt);
+}
+
+.BottomBar__right {
+  display: flex;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  color: var(--header_tint);
+}
+
+.BottomBar__right .Avatar {
+  margin-right: 8px;
+}
+
+.BottomBar--vkapps .BottomBar__right {
+  min-width: 90px;
+}
+
+.BottomBar--sizeX-compact .BottomBar__separator {
+  padding-top: 4px;
+}
+
+/**
+ * iOS
+ */
+
+.BottomBar--ios ~ .FixedLayout--top,
+.BottomBar--ios ~ * .FixedLayout--top:not(.BottomBar__fixed) {
+  top: calc(var(--panelheader_height_ios) + var(--safe-area-inset-top));
+}
+
+.BottomBar--ios::before,
+.BottomBar--ios .BottomBar__in {
+  height: var(--panelheader_height_ios);
+  padding-top: var(--safe-area-inset-top);
+}
+
+.BottomBar--ios .BottomBar__left {
+  flex-basis: 0;
+  flex-shrink: 0;
+  flex-grow: 1;
+  opacity: 1;
+  transition: opacity .3s var(--ios-easing);
+  padding: 4px 0 4px 4px;
+}
+
+.BottomBar--ios .BottomBar__left .PanelHeaderButton + .PanelHeaderButton--primitive {
+  margin-left: -6px;
+  padding-left: 0;
+}
+
+.BottomBar--ios .BottomBar__content {
+  text-align: center;
+  opacity: 1;
+  transition: opacity .3s var(--ios-easing);
+}
+
+.BottomBar--ios .BottomBar__content-in {
+  font-size: 21px;
+  line-height: var(--panelheader_height_ios);
+}
+
+.BottomBar--ios .BottomBar__content > * {
+  padding: 0 4px;
+}
+
+.BottomBar--ios.BottomBar--no-left .BottomBar__content > * {
+  padding-left: 0;
+}
+
+.BottomBar--ios.BottomBar--no-left .BottomBar__content {
+  padding-left: 8px;
+}
+
+.BottomBar--ios.BottomBar--no-right .BottomBar__content > * {
+  padding-right: 0;
+}
+
+.BottomBar--ios.BottomBar--no-right .BottomBar__content {
+  padding-right: 8px;
+}
+
+.BottomBar--ios .BottomBar__right {
+  flex-basis: 0;
+  flex-shrink: 0;
+  flex-grow: 1;
+  opacity: 1;
+  transition: opacity .3s var(--ios-easing);
+  padding: 4px 4px 4px 0;
+}
+
+.View--ios .View__panel--prev .BottomBar__left,
+.View--ios .View__panel--prev .BottomBar__right,
+.View--ios .View__panel--prev .BottomBar__content {
+  opacity: 0;
+}
+
+/**
+ * Android
+ */
+
+@supports not (padding-top: env(safe-area-inset-top)) {
+  .BottomBar--android,
+  .BottomBar--vkcom {
+    --safe-area-inset-top: 0px;
+  }
+}
+
+.BottomBar--android ~ .FixedLayout--top,
+.BottomBar--android ~ * .FixedLayout--top:not(.BottomBar__fixed) {
+  top: calc(var(--panelheader_height_android) + var(--safe-area-inset-top));
+}
+
+.BottomBar--android::before,
+.BottomBar--android .BottomBar__in {
+  height: var(--panelheader_height_android);
+  padding-top: var(--safe-area-inset-top);
+}
+
+.BottomBar--android .BottomBar__left:not(:empty) {
+  padding: 4px 0 4px 4px;
+}
+
+.BottomBar--android .BottomBar__content {
+  align-items: center;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+.BottomBar--android .BottomBar__content-in {
+  font-size: 23px;
+}
+
+.BottomBar--android .BottomBar__content > * {
+  padding: 0 12px;
+}
+
+.BottomBar--android .Search,
+.BottomBar--vkcom .Search {
+  padding: 0 4px;
+}
+
+.BottomBar--android.BottomBar--no-left .BottomBar__content > *,
+.BottomBar--vkcom.BottomBar--no-left .BottomBar__content > * {
+  padding-left: 0;
+}
+
+.BottomBar--android.BottomBar--no-left .BottomBar__content {
+  padding-left: 16px;
+}
+
+.SplitCol--spaced .BottomBar--android.BottomBar--no-left .BottomBar__content {
+  padding-left: 0;
+}
+
+.BottomBar--android.BottomBar--no-right .BottomBar__content > *,
+.BottomBar--vkcom.BottomBar--no-right .BottomBar__content > * {
+  padding-right: 0;
+}
+
+.BottomBar--android.BottomBar--no-right .BottomBar__content {
+  padding-right: 16px;
+}
+
+.SplitCol--spaced .BottomBar--android.BottomBar--no-right .BottomBar__content {
+  padding-right: 0;
+}
+
+.BottomBar--android .BottomBar__right:not(:empty),
+.BottomBar--vkcom .BottomBar__right:not(:empty) {
+  padding: 4px 4px 4px 0;
+}
+
+/**
+ * VKCOM
+ */
+
+.BottomBar--vkcom {
+  position: relative;
+  z-index: 10;
+}
+
+.BottomBar--vkcom ~ .FixedLayout--top,
+.BottomBar--vkcom ~ * .FixedLayout--top:not(.BottomBar__fixed) {
+  top: calc(var(--panelheader_height_vkcom) + var(--safe-area-inset-top));
+}
+
+.BottomBar--vkcom .BottomBar__in {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-shadow: 0 0 0 var(--thin-border) var(--input_border) inset;
+  border-bottom: none;
+}
+
+.BottomBar--vkcom .BottomBar__content {
+  text-align: center;
+}
+
+.BottomBar--vkcom::before,
+.BottomBar--vkcom .BottomBar__in {
+  height: var(--panelheader_height_vkcom);
+  padding-top: var(--safe-area-inset-top);
+}
+
+.BottomBar--vkcom .BottomBar__left:not(:empty) {
+  padding: 0 0 0 4px;
+}
+
+.BottomBar--vkcom .BottomBar__left,
+.BottomBar--vkcom .BottomBar__right {
+  flex-basis: 0;
+  flex-shrink: 0;
+  flex-grow: 1;
+}

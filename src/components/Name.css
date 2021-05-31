@@ -1,0 +1,11 @@
+.Name__title {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.Name__date {
+
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text_secondary);
+}

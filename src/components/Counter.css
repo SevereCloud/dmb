@@ -1,0 +1,14 @@
+.Counter__description {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.Counter__number {
+  font-size: 112px;
+  font-weight: 900;
+}
+
+.Counter__unit {
+  font-size: 24px;
+  font-weight: 700;
+}
