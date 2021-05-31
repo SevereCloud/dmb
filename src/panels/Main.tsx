@@ -15,6 +15,7 @@ import {
   Icon28AddOutline,
   Icon28DeleteOutline,
   Icon28EditOutline,
+  Icon28StoryAddOutline,
   Icon56FavoriteOutline,
 } from '@vkontakte/icons';
 import BottomBar from '../components/BottomBar';
@@ -139,6 +140,11 @@ export class Main extends React.Component<MainProps, MainState> {
                             }}
                           >
                             <Icon28EditOutline
+                              style={{ color: 'var(--text_secondary)' }}
+                            />
+                          </PanelHeaderButton>
+                          <PanelHeaderButton>
+                            <Icon28StoryAddOutline
                               style={{ color: 'var(--text_secondary)' }}
                             />
                           </PanelHeaderButton>
