@@ -15,6 +15,7 @@ import { Shared } from './panels/Shared';
 
 interface AppState {
   scheme: AppearanceSchemeType;
+  location: string;
   activeView: string;
   activePanel: string;
   popout?: React.ReactNode;
@@ -40,6 +41,7 @@ export class App extends React.Component<AppProps, AppState> {
 
     this.state = {
       scheme: 'bright_light',
+      location: window.location.hash.substring(1),
       activeView: '',
       activePanel: panel,
       popout: null,
@@ -101,6 +103,14 @@ export class App extends React.Component<AppProps, AppState> {
       schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
       this.setState({ scheme: data.scheme });
       document.body.attributes.setNamedItem(schemeAttribute);
+    });
+
+    vkAPI.onLocationChanged(({ location }) => {
+      this.setState({ location });
+
+      if (location.startsWith('shared')) {
+        this.setPanel('shared');
+      }
     });
 
     vkAPI
@@ -224,7 +234,7 @@ export class App extends React.Component<AppProps, AppState> {
 
   render(): JSX.Element {
     const { vkAPI } = this.props;
-    const { activePanel, indexSlide, timers, popout } = this.state;
+    const { activePanel, indexSlide, timers, popout, location } = this.state;
 
     return (
       <AppRoot>
@@ -240,7 +250,11 @@ export class App extends React.Component<AppProps, AppState> {
             />
           </Panel>
           <Panel id="shared">
-            <Shared setPanel={this.setPanel} newTimer={this.newTimer} />
+            <Shared
+              location={location}
+              setPanel={this.setPanel}
+              newTimer={this.newTimer}
+            />
           </Panel>
           <Panel id="list-timers">
             <ListTimers

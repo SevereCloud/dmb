@@ -11,55 +11,43 @@ import type { Timer } from '../types';
 import Counter from '../components/Counter';
 import Name from '../components/Name';
 
-interface SharedState {
-  timer: Timer;
-}
-
 export interface SharedProps {
+  location: string;
   setPanel: (name: string) => void;
   newTimer: (t: Timer) => void;
 }
 
-export class Shared extends React.Component<SharedProps, SharedState> {
+export class Shared extends React.Component<SharedProps> {
   constructor(props: SharedProps) {
     super(props);
-
-    this.state = {
-      timer: { title: 'title', start_date: 0, end_date: 365 * 60 * 60 * 24 },
-    };
   }
-  componentDidMount() {
-    const { setPanel } = this.props;
-    const hash = window.location.hash.substring(1);
-    const params = new URLSearchParams(hash);
+
+  render(): JSX.Element {
+    const { setPanel, newTimer, location } = this.props;
+    // const { timer } = this.state;
+
+    const params = new URLSearchParams(location);
 
     const title = params.get('title');
     console.log('title', title);
     if (!title || title.length > 20) {
       setPanel('main');
-      return;
+      return <></>;
     }
 
     const s = Number(params.get('s'));
     if (!s) {
       setPanel('main');
-      return;
+      return <></>;
     }
 
     const e = Number(params.get('e'));
     if (!e || e < s) {
       setPanel('main');
-      return;
+      return <></>;
     }
 
-    this.setState({
-      timer: { title: title, start_date: s, end_date: e },
-    });
-  }
-
-  render(): JSX.Element {
-    const { setPanel, newTimer } = this.props;
-    const { timer } = this.state;
+    const timer: Timer = { title: title, start_date: s, end_date: e };
 
     return (
       <>
