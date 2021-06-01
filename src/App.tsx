@@ -106,11 +106,15 @@ export class App extends React.Component<AppProps, AppState> {
     });
 
     vkAPI.onLocationChanged(({ location }) => {
+      if (location.startsWith('opened')) return;
+
       this.setState({ location });
 
       if (location.startsWith('shared')) {
         this.setPanel('shared');
       }
+
+      vkAPI.setLocationHash('opened&' + location);
     });
 
     vkAPI
