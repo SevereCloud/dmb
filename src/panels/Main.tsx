@@ -21,6 +21,8 @@ import {
 import BottomBar from '../components/BottomBar';
 import Counter from '../components/Counter';
 import Name from '../components/Name';
+import type { VKMiniAppAPI } from '@vkontakte/vk-mini-apps-api';
+import { sharedLink, storyDefault } from '../lib/story';
 
 interface MainState {
   currentIndexSlide: number;
@@ -30,6 +32,7 @@ export interface MainProps {
   // setView: (view: string, name?: string) => void;
   setPanel: (name: string) => void;
   // goBack: () => void;
+  vkAPI: VKMiniAppAPI;
 
   indexSlide: number;
   timers: Array<Timer>;
@@ -47,7 +50,7 @@ export class Main extends React.Component<MainProps, MainState> {
   }
 
   render(): JSX.Element {
-    const { setPanel, timers, deleteTimer, indexSlide, choseSlide } =
+    const { setPanel, timers, deleteTimer, indexSlide, choseSlide, vkAPI } =
       this.props;
     const { currentIndexSlide } = this.state;
 
@@ -126,7 +129,20 @@ export class Main extends React.Component<MainProps, MainState> {
                               style={{ color: 'var(--text_secondary)' }}
                             />
                           </PanelHeaderButton>
-                          <PanelHeaderButton>
+                          <PanelHeaderButton
+                            onClick={() => {
+                              vkAPI.showStoryBox({
+                                background_type: 'image',
+                                blob: storyDefault(item),
+                                attachment: {
+                                  text: 'learn_more',
+                                  type: 'url',
+                                  url: sharedLink(item),
+                                },
+                                locked: true,
+                              });
+                            }}
+                          >
                             <Icon28StoryAddOutline
                               style={{ color: 'var(--text_secondary)' }}
                             />

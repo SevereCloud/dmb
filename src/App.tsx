@@ -34,7 +34,9 @@ export class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
 
-    const panel = window.location.hash.startsWith('#shared') ? 'shared' : 'main';
+    const panel = window.location.hash.startsWith('#shared')
+      ? 'shared'
+      : 'main';
 
     this.state = {
       scheme: 'bright_light',
@@ -221,7 +223,7 @@ export class App extends React.Component<AppProps, AppState> {
   }
 
   render(): JSX.Element {
-    //:const { vkAPI } = this.props;
+    const { vkAPI } = this.props;
     const { activePanel, indexSlide, timers, popout } = this.state;
 
     return (
@@ -229,6 +231,7 @@ export class App extends React.Component<AppProps, AppState> {
         <View activePanel={activePanel} popout={popout}>
           <Panel id="main">
             <Main
+              vkAPI={vkAPI}
               indexSlide={indexSlide}
               timers={timers}
               setPanel={this.setPanel}

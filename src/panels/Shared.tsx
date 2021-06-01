@@ -24,24 +24,33 @@ export class Shared extends React.Component<SharedProps, SharedState> {
   constructor(props: SharedProps) {
     super(props);
 
-
     this.state = {
-      timer: { title: "title", start_date: 0, end_date: 365*60*60*24 },
+      timer: { title: 'title', start_date: 0, end_date: 365 * 60 * 60 * 24 },
     };
   }
   componentDidMount() {
-    const {setPanel} = this.props
-    const hash = window.location.hash.substring(1)
-    const params = new URLSearchParams(hash)
+    const { setPanel } = this.props;
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
 
-    const title = params.get("title")
-    if (!title||title.length>20) {setPanel("main");return}
+    const title = params.get('title');
+    console.log("title", title)
+    if (!title || title.length > 20) {
+      setPanel('main');
+      return;
+    }
 
-    const s = Number(params.get("s"))
-    if (!s) {setPanel("main");return}
+    const s = Number(params.get('s'));
+    if (!s) {
+      setPanel('main');
+      return;
+    }
 
-    const e = Number(params.get("e"))
-    if (!e || e<s) {setPanel("main");return}
+    const e = Number(params.get('e'));
+    if (!e || e < s) {
+      setPanel('main');
+      return;
+    }
 
     this.setState({
       timer: { title: title, start_date: s, end_date: e },
@@ -67,30 +76,31 @@ export class Shared extends React.Component<SharedProps, SharedState> {
           }
         />
         <div
-            style={{
-              boxSizing: 'border-box',
-              paddingTop: 56,
-              minHeight: '100vh',
-            }}>
-        <Div>
-          <Name timer={timer} />
-        </Div>
-        <FixedLayout vertical="bottom">
+          style={{
+            boxSizing: 'border-box',
+            paddingTop: 56,
+            minHeight: '100vh',
+          }}
+        >
           <Div>
-            <Counter timer={timer} />
-            <Button
-              size="l"
-              onClick={() => {
-                newTimer(timer);
-                setPanel('main');
-              }}
-              stretched
-            >
-              Добавить счётчик себе
-            </Button>
+            <Name timer={timer} />
           </Div>
-        </FixedLayout>
-      </div>
+          <FixedLayout vertical="bottom">
+            <Div>
+              <Counter timer={timer} />
+              <Button
+                size="l"
+                onClick={() => {
+                  newTimer(timer);
+                  setPanel('main');
+                }}
+                stretched
+              >
+                Добавить счётчик себе
+              </Button>
+            </Div>
+          </FixedLayout>
+        </div>
       </>
     );
   }
