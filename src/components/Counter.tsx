@@ -213,8 +213,8 @@ class Counter extends React.Component<CounterProps, CounterState> {
       <div
         onClick={() => {
           let index = counterTypeList.indexOf(counterType) + 1;
-          if (index >= counterTypeList.length) index = 0;
           if (now_time > timer.end_date) index += 1;
+          if (index >= counterTypeList.length) index = 0;
 
           this.setState({
             counterType: counterTypeList[index],
