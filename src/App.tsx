@@ -11,6 +11,7 @@ import { ListTimers } from './panels/ListTimers';
 import type { Timer } from './types';
 import { AddTimer } from './panels/AddTimer';
 import { EditTimer } from './panels/EditTimer';
+import { Shared } from './panels/Shared';
 
 interface AppState {
   scheme: AppearanceSchemeType;
@@ -33,10 +34,14 @@ export class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
 
+    const panel = window.location.hash.startsWith('#shared')
+      ? 'shared'
+      : 'main';
+
     this.state = {
       scheme: 'bright_light',
       activeView: '',
-      activePanel: 'main',
+      activePanel: panel,
       popout: null,
       history: [{ view: '', panel: 'main' }],
 
@@ -218,7 +223,7 @@ export class App extends React.Component<AppProps, AppState> {
   }
 
   render(): JSX.Element {
-    //:const { vkAPI } = this.props;
+    const { vkAPI } = this.props;
     const { activePanel, indexSlide, timers, popout } = this.state;
 
     return (
@@ -226,12 +231,16 @@ export class App extends React.Component<AppProps, AppState> {
         <View activePanel={activePanel} popout={popout}>
           <Panel id="main">
             <Main
+              vkAPI={vkAPI}
               indexSlide={indexSlide}
               timers={timers}
               setPanel={this.setPanel}
               deleteTimer={this.deleteTimer}
               choseSlide={this.choseSlide}
             />
+          </Panel>
+          <Panel id="shared">
+            <Shared setPanel={this.setPanel} newTimer={this.newTimer} />
           </Panel>
           <Panel id="list-timers">
             <ListTimers

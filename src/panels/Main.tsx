@@ -10,26 +10,29 @@ import {
 } from '@vkontakte/vkui';
 
 import PanelHeaderReorder from '../components/PanelHeaderReorder';
-import type { CounterType, Timer } from '../types';
+import type { Timer } from '../types';
 import {
   Icon28AddOutline,
   Icon28DeleteOutline,
   Icon28EditOutline,
+  Icon28StoryAddOutline,
   Icon56FavoriteOutline,
 } from '@vkontakte/icons';
 import BottomBar from '../components/BottomBar';
 import Counter from '../components/Counter';
 import Name from '../components/Name';
+import type { VKMiniAppAPI } from '@vkontakte/vk-mini-apps-api';
+import { sharedLink, storyDefault } from '../lib/story';
 
 interface MainState {
   currentIndexSlide: number;
-  counterType: CounterType;
 }
 
 export interface MainProps {
   // setView: (view: string, name?: string) => void;
   setPanel: (name: string) => void;
   // goBack: () => void;
+  vkAPI: VKMiniAppAPI;
 
   indexSlide: number;
   timers: Array<Timer>;
@@ -41,27 +44,15 @@ export class Main extends React.Component<MainProps, MainState> {
   constructor(props: MainProps) {
     super(props);
 
-    const ct: CounterType = localStorage.getItem('counter-type')
-      ? (localStorage.getItem('counter-type') as CounterType)
-      : 'days_left';
-
     this.state = {
-      counterType: ct,
       currentIndexSlide: props.indexSlide,
     };
-
-    this.updateCounterType = this.updateCounterType.bind(this);
-  }
-
-  updateCounterType(t: CounterType): void {
-    localStorage.setItem('counter-type', t);
-    this.setState({ counterType: t });
   }
 
   render(): JSX.Element {
-    const { setPanel, timers, deleteTimer, indexSlide, choseSlide } =
+    const { setPanel, timers, deleteTimer, indexSlide, choseSlide, vkAPI } =
       this.props;
-    const { currentIndexSlide, counterType } = this.state;
+    const { currentIndexSlide } = this.state;
 
     return (
       <>
@@ -116,11 +107,7 @@ export class Main extends React.Component<MainProps, MainState> {
                 </Div>
                 <FixedLayout vertical="bottom">
                   <Div>
-                    <Counter
-                      timer={item}
-                      counterType={counterType}
-                      updateCounterType={this.updateCounterType}
-                    />
+                    <Counter timer={item} />
                   </Div>
                   {Math.abs(currentIndexSlide - index) < 2 && (
                     <BottomBar
@@ -139,6 +126,24 @@ export class Main extends React.Component<MainProps, MainState> {
                             }}
                           >
                             <Icon28EditOutline
+                              style={{ color: 'var(--text_secondary)' }}
+                            />
+                          </PanelHeaderButton>
+                          <PanelHeaderButton
+                            onClick={() => {
+                              vkAPI.showStoryBox({
+                                background_type: 'image',
+                                blob: storyDefault(item),
+                                attachment: {
+                                  text: 'learn_more',
+                                  type: 'url',
+                                  url: sharedLink(item),
+                                },
+                                locked: true,
+                              });
+                            }}
+                          >
+                            <Icon28StoryAddOutline
                               style={{ color: 'var(--text_secondary)' }}
                             />
                           </PanelHeaderButton>
