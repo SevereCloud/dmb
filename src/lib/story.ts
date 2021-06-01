@@ -1,4 +1,4 @@
-import { daysLeft, getDate, numberCase } from '../date';
+import { daysLeft, getDate, getDays, numberCase } from '../date';
 import type { Timer } from '../types';
 
 export const sharedLink = (timer: Timer): string => {
@@ -30,7 +30,17 @@ export const storyDefault = (timer: Timer): string => {
   c.font = 'bold ' + 48 + 'px Roboto ';
   c.fillText(getDate(timer.end_date), 96, 370);
 
-  const n = daysLeft(timer.end_date);
+  const now_time = new Date().getTime() / 1000;
+  const n =
+    now_time < timer.end_date
+      ? daysLeft(timer.end_date)
+      : getDays(new Date(timer.end_date * 1000), new Date());
+
+  const desc =
+    now_time < timer.end_date
+      ? `${numberCase(n, 'День', 'Дня', 'Дней')} до дембеля`
+      : `${numberCase(n, 'День', 'Дня', 'Дней')} после дембеля`;
+
   const count = n.toString();
   c.fillStyle = 'black';
   c.font = '900 ' + 336 + 'px Roboto ';
@@ -40,7 +50,6 @@ export const storyDefault = (timer: Timer): string => {
     canvas.height / 2 + 100,
   );
 
-  const desc = `${numberCase(n, 'День', 'Дня', 'Дней')} до дембеля`;
   c.fillStyle = '#818c99';
   c.font = '700 ' + 72 + 'px Roboto ';
   c.fillText(
