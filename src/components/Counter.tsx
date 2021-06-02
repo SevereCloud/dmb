@@ -5,11 +5,9 @@ import { getDays, getWeeks, daysLeft, numberCase } from '../date';
 import './Counter.css';
 
 export interface CounterProps {
-  timer: Timer;
-}
-
-export interface CounterState {
   counterType: CounterType;
+  updateCounterType: (t: CounterType) => void;
+  timer: Timer;
 }
 
 const CounterDaysAfter: FC<{ timer: Timer }> = ({
@@ -192,56 +190,42 @@ const CounterPercentPassed: FC<{ timer: Timer }> = ({
   );
 };
 
-class Counter extends React.Component<CounterProps, CounterState> {
-  constructor(props: CounterProps) {
-    super(props);
+const Counter: FC<CounterProps> = ({
+  counterType,
+  updateCounterType,
+  timer,
+}: CounterProps) => {
+  const now_time = new Date().getTime() / 1000;
+  return (
+    <div
+      onClick={() => {
+        let index = counterTypeList.indexOf(counterType) + 1;
+        if (now_time > timer.end_date) index += 1;
+        if (index >= counterTypeList.length) index = 0;
 
-    const counterType: CounterType = localStorage.getItem('counter-type')
-      ? (localStorage.getItem('counter-type') as CounterType)
-      : 'days_left';
-    this.state = {
-      counterType,
-    };
-  }
-
-  render(): JSX.Element {
-    const { timer } = this.props;
-    const { counterType } = this.state;
-
-    const now_time = new Date().getTime() / 1000;
-    return (
-      <div
-        onClick={() => {
-          let index = counterTypeList.indexOf(counterType) + 1;
-          if (now_time > timer.end_date) index += 1;
-          if (index >= counterTypeList.length) index = 0;
-
-          this.setState({
-            counterType: counterTypeList[index],
-          });
-          localStorage.setItem('counter-type', counterTypeList[index]);
-        }}
-      >
-        {timer.end_date > now_time
-          ? {
-              days_left: <CounterDaysLeft timer={timer} />,
-              days_passed: <CounterDaysPassed timer={timer} />,
-              weeks_left: <CounterWeeksLeft timer={timer} />,
-              weeks_passed: <CounterWeeksPassed timer={timer} />,
-              percent_left: <CounterPercentLeft timer={timer} />,
-              percent_passed: <CounterPercentPassed timer={timer} />,
-            }[counterType]
-          : {
-              days_left: <CounterDaysAfter timer={timer} />,
-              days_passed: <CounterDaysAfter timer={timer} />,
-              weeks_left: <CounterWeeksAfter timer={timer} />,
-              weeks_passed: <CounterWeeksAfter timer={timer} />,
-              percent_left: <CounterPercentAfter timer={timer} />,
-              percent_passed: <CounterPercentAfter timer={timer} />,
-            }[counterType]}
-      </div>
-    );
-  }
-}
+        updateCounterType(counterTypeList[index]);
+        localStorage.setItem('counter-type', counterTypeList[index]);
+      }}
+    >
+      {timer.end_date > now_time
+        ? {
+            days_left: <CounterDaysLeft timer={timer} />,
+            days_passed: <CounterDaysPassed timer={timer} />,
+            weeks_left: <CounterWeeksLeft timer={timer} />,
+            weeks_passed: <CounterWeeksPassed timer={timer} />,
+            percent_left: <CounterPercentLeft timer={timer} />,
+            percent_passed: <CounterPercentPassed timer={timer} />,
+          }[counterType]
+        : {
+            days_left: <CounterDaysAfter timer={timer} />,
+            days_passed: <CounterDaysAfter timer={timer} />,
+            weeks_left: <CounterWeeksAfter timer={timer} />,
+            weeks_passed: <CounterWeeksAfter timer={timer} />,
+            percent_left: <CounterPercentAfter timer={timer} />,
+            percent_passed: <CounterPercentAfter timer={timer} />,
+          }[counterType]}
+    </div>
+  );
+};
 
 export default Counter;

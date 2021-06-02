@@ -106,6 +106,7 @@ export class App extends React.Component<AppProps, AppState> {
     });
 
     vkAPI.onLocationChanged(({ location }) => {
+      console.log("onLocationChanged", location)
       if (location.startsWith('opened')) return;
 
       this.setState({ location });
@@ -115,6 +116,7 @@ export class App extends React.Component<AppProps, AppState> {
       }
 
       vkAPI.setLocationHash('opened&' + location);
+      console.log(window.location.hash)
     });
 
     vkAPI

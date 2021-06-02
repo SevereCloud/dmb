@@ -7,7 +7,7 @@ import {
   PanelHeaderClose,
 } from '@vkontakte/vkui';
 
-import type { Timer } from '../types';
+import type { CounterType, Timer } from '../types';
 import Counter from '../components/Counter';
 import Name from '../components/Name';
 
@@ -17,14 +17,26 @@ export interface SharedProps {
   newTimer: (t: Timer) => void;
 }
 
-export class Shared extends React.Component<SharedProps> {
+interface SharedState {
+  counterType: CounterType;
+}
+
+export class Shared extends React.Component<SharedProps, SharedState> {
   constructor(props: SharedProps) {
     super(props);
+
+    const ct: CounterType = localStorage.getItem('counter-type')
+      ? (localStorage.getItem('counter-type') as CounterType)
+      : 'days_left';
+
+    this.state = {
+      counterType: ct,
+    };
   }
 
   render(): JSX.Element {
     const { setPanel, newTimer, location } = this.props;
-    // const { timer } = this.state;
+    const { counterType } = this.state;
 
     const params = new URLSearchParams(location);
 
@@ -75,7 +87,11 @@ export class Shared extends React.Component<SharedProps> {
           </Div>
           <FixedLayout vertical="bottom">
             <Div>
-              <Counter timer={timer} />
+              <Counter
+                counterType={counterType}
+                updateCounterType={(ct) => this.setState({ counterType: ct })}
+                timer={timer}
+              />
               <Button
                 size="l"
                 onClick={() => {

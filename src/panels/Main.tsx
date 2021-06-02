@@ -10,7 +10,7 @@ import {
 } from '@vkontakte/vkui';
 
 import PanelHeaderReorder from '../components/PanelHeaderReorder';
-import type { Timer } from '../types';
+import type { CounterType, Timer } from '../types';
 import {
   Icon28AddOutline,
   Icon28DeleteOutline,
@@ -26,6 +26,7 @@ import { sharedLink, storyDefault } from '../lib/story';
 
 interface MainState {
   currentIndexSlide: number;
+  counterType: CounterType;
 }
 
 export interface MainProps {
@@ -44,7 +45,12 @@ export class Main extends React.Component<MainProps, MainState> {
   constructor(props: MainProps) {
     super(props);
 
+    const ct: CounterType = localStorage.getItem('counter-type')
+      ? (localStorage.getItem('counter-type') as CounterType)
+      : 'days_left';
+
     this.state = {
+      counterType: ct,
       currentIndexSlide: props.indexSlide,
     };
   }
@@ -52,7 +58,7 @@ export class Main extends React.Component<MainProps, MainState> {
   render(): JSX.Element {
     const { setPanel, timers, deleteTimer, indexSlide, choseSlide, vkAPI } =
       this.props;
-    const { currentIndexSlide } = this.state;
+    const { currentIndexSlide, counterType } = this.state;
 
     return (
       <>
@@ -107,7 +113,13 @@ export class Main extends React.Component<MainProps, MainState> {
                 </Div>
                 <FixedLayout vertical="bottom">
                   <Div>
-                    <Counter timer={item} />
+                    <Counter
+                      counterType={counterType}
+                      updateCounterType={(ct) =>
+                        this.setState({ counterType: ct })
+                      }
+                      timer={item}
+                    />
                   </Div>
                   {Math.abs(currentIndexSlide - index) < 2 && (
                     <BottomBar
