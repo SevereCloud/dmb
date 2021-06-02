@@ -93,6 +93,7 @@ export class Shared extends React.Component<SharedProps, SharedState> {
                 timer={timer}
               />
               <Button
+                style={{ marginTop: 24 }}
                 size="l"
                 onClick={() => {
                   newTimer(timer);
